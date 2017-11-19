@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width = device-width, initial-scale = 1">
+
+
+    <title>Fakebook</title>
+
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="css/fakebook.css">
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <div class="page-header">
+
+        <nav class="navbar navbar default">
+            <div class="container">
+
+                    <div class="row">
+                        <div class="col-lg-4 col-md-4" id="left-header-space">
+                            <h2>Fakebook</h2>
+                        </div>
+                        <div class="col-lg-4 col-md-4" id="middle-header-space">
+                            <!-- will contain search bar-->
+                        </div>
+                        <div class="col-lg-4 col-md-4" id="right-header-space">
+
+                            <div style="top: 0.5em;">
+                                <a href="#" class="dropdown-toggle pull-right" data-toggle="dropdown">
+                                    <button type="button"
+                                            class="btn btn-secondary btn-lg glyphicon glyphicon-cog settings-button"
+                                            style="margin-left: 10px;"></button>
+                                </a><br><br><br>
+
+
+                                <ul class="dropdown-menu pull-right col-lg-8" style="right: 2.5em" id="no_session_dropdown_list">
+                                    <li id="login_li"><a>Login <span class="glyphicon glyphicon-log-in pull-right"></span></a></li>
+                                    <li class="divider" id="divider_1"></li>
+                                    <li id="login_form_li" class="login-hides">
+                                        <form>
+                                            <div class="form-group"><input type="email" class="form-control" id="login_email" placeholder="email"></div>
+                                            <div class="form-group"><input type="password" class="form-control" id="login_password" placeholder="password"></div>
+                                            <button type="submit" class="btn btn-default center-block" id="login_btn">Submit</button>
+                                        </form>
+
+                                    </li>
+                                    <li class="divider login-hides" id="divider_2"></li>
+                                    <li id="register_li"><a>Register <span class="glyphicon glyphicon-plus pull-right"></span></a></li>
+                                    <li id="register_form_li" class="register-hides">
+                                        <form>
+                                            <div class="form-group"><input type="text" class="form-control" id="register_first_name" placeholder="first name"></div>
+                                            <div class="form-group"><input type="text" class="form-control" id="register_last_name" placeholder="last name"></div>
+                                            <div class="form-group"><input type="email" class="form-control" id="register_email" placeholder="email"></div>
+                                            <div class="form-group"><input type="password" class="form-control" id="register_password" placeholder="password"></div>
+                                            <div class="form-group"><input type="password" class="form-control" id="register_password_retype" placeholder="retype password"></div>
+                                            <button type="submit" class="btn btn-default center-block" id="register_btn">Submit</button>
+                                        </form>
+
+                                    </li>
+
+
+                                    <li id="logout_li"><a>Logout <span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
+                                    <li class="divider logout-hides" id="divider_3"></li>
+                                    <li id="logout_form_li" class="logout-hides">
+                                        <form>
+                                            <button type="submit" class="btn btn-default center-block" id="logout_btn">Logout</button>
+                                        </form>
+
+                                    </li>
+                                </ul>
+
+                            </div>
+
+                        </div>
+                    </div>
+            </div>
+
+
+        </nav>
+    </div>
+
+</div>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-lg-4 col-md-4" id="left-body-space">
+
+        </div>
+        <div class="col-lg-4 col-md-4" id="middle-body-space">
+
+        </div>
+        <div class="col-lg-4 col-md-4" id="right-body-space">
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!--<script src="https://code.jquery.com/jquery-3.2.1.min.js"-->
+        <!--integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="-->
+        <!--crossorigin="anonymous"></script>-->
+<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/bootstrap-3.3.7.min.js"></script>
+
+<script src="js/validation.js"></script>
+<script src="js/dropdown-menu.js"></script>
+<script src="js/component-loader.js"></script>
+<script src="js/other-profile-loader.js"></script>
+<script src="js/registration.js"></script>
+
+<script src="js/fakebook.js"></script>
+
+
+</body>
+
+</html>

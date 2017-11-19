@@ -1,0 +1,47 @@
+##    SECURITY
+#security:
+#  user: root
+#    password: rootroot
+
+
+#   DATABASE
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/fakebook
+    username: root
+    password: rootroot
+
+  jpa:
+    generate-ddl: true
+    show-sql: false
+#    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  profiles:
+    active: mysql
+
+  session:
+    store-type: jdbc
+
+##  mvc:
+##    view:
+##      prefix: /WEB-INF/view/
+##      suffix: .jsp
+#  thymeleaf:
+#    check-template-location: true
+#    content-type: text/html
+#    encoding: UTF-8
+#    prefix: classpath:/templates/
+#    suffix: .html
+#    mode: LEGACYHTML5
+#    cache: false
+
+
+
+## reroutes all controllers from localhost:8080/users/all           or    localhost:8080/posts/all
+## to                            localhost:8080/fakebook/users/all  or    localhost:8080/fakebook/posts/all
+#server:
+#  context-path: /fakebook
+#  port: 8080

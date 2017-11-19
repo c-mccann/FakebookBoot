@@ -1,0 +1,37 @@
+import com.carlmccann2.fakebookboot.FakebookBootApplicationTests;
+import controller.UsersControllerTest;
+import model.repositories.*;
+import model.services.UsersServiceTest;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+
+@RunWith(Suite.class)
+@SpringBootTest
+@Suite.SuiteClasses({
+        // repos
+        CommentsRepositoryTest.class,
+        FriendsRepositoryTest.class,
+        LikesRepositoryTest.class,
+        PhotosRepositoryTest.class,
+        PostsRepositoryTest.class,
+        UsersRepositoryTest.class,
+
+        // services
+
+
+        UsersServiceTest.class,
+
+        // controllers
+
+        UsersControllerTest.class,
+        // other
+        FakebookBootApplicationTests.class
+})
+
+@ActiveProfiles("test")
+public final class AllTests {
+
+
+}

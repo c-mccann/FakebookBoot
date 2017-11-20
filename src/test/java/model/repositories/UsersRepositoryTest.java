@@ -1,6 +1,7 @@
 package model.repositories;
 
 import com.carlmccann2.fakebookboot.DataConfig;
+import com.carlmccann2.fakebookboot.FakebookBootApplication;
 import com.carlmccann2.fakebookboot.model.orm.User;
 import com.carlmccann2.fakebookboot.model.repositories.UsersRepository;
 import org.apache.commons.logging.Log;
@@ -20,7 +21,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-@ContextConfiguration(classes = DataConfig.class)
+@ContextConfiguration(classes = {DataConfig.class, FakebookBootApplication.class})
 @ActiveProfiles("test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UsersRepositoryTest {
@@ -31,7 +32,7 @@ public class UsersRepositoryTest {
 
     @Test
     public void test01_getUserByEmail(){
-        String email = "abethebabe@gmail.com";
+        String email = "johndoe@gmail.com";
         User user = usersRepository.getUserByEmail(email);
         assertNotNull("test01_getUserByEmail: " + user.toString(), user);
         log.info("test01_getUserByEmail: " + user.toString());

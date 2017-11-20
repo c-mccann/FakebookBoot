@@ -18,6 +18,8 @@ public interface FriendsRepository extends JpaRepository<Friend, Integer> {
 
     Friend getByUserOneAndUserTwoAndFriendsSinceIsNotNull(User userOne, User userTwo);
 
+    Friend getByUserOneAndUserTwoAndFriendsSinceIsNull(User userOne, User userTwo);
+
 
 
 

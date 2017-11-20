@@ -1,6 +1,7 @@
 package model.repositories;
 
 import com.carlmccann2.fakebookboot.DataConfig;
+import com.carlmccann2.fakebookboot.FakebookBootApplication;
 import com.carlmccann2.fakebookboot.model.repositories.PhotosRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,7 +19,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-@ContextConfiguration(classes = DataConfig.class)
+@ContextConfiguration(classes = {DataConfig.class, FakebookBootApplication.class})
 @ActiveProfiles("test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PhotosRepositoryTest {

@@ -2,14 +2,11 @@ package com.carlmccann2.fakebookboot.controller;
 
 import com.carlmccann2.fakebookboot.model.orm.Friend;
 import com.carlmccann2.fakebookboot.model.orm.User;
-import com.carlmccann2.fakebookboot.model.repositories.FriendsRepository;
-import com.carlmccann2.fakebookboot.model.repositories.UsersRepository;
 import com.carlmccann2.fakebookboot.model.services.FriendsService;
 import com.carlmccann2.fakebookboot.model.services.UsersService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,19 +62,23 @@ public class FriendsController {
 
     @PostMapping("/requests/{receiverUserId}")
     @Transactional
-    public boolean sendFriendRequest(@RequestBody HttpServletRequest request, @PathVariable Integer receiverUserId){
+    public boolean sendFriendRequest(HttpServletRequest request, @PathVariable Integer receiverUserId){
         log.info("sendFriendRequest()");
         User user = (User) request.getSession().getAttribute("user");
-        Integer senderUserId = user.getId();
-        Friend friend = new Friend(usersService.getUser(senderUserId), usersService.getUser(receiverUserId),
+        Friend friend = new Friend(user, usersService.getUser(receiverUserId),
                 null, null);
-        if(friendsService.getByUserOneAndUserTwo(friend.getUserOne(), friend.getUserTwo()) == null){
+        Friend f1 = friendsService.getByUserOneAndUserTwoAndFriendsSinceIsNotNull(friend.getUserOne(), friend.getUserTwo());
+        Friend f2 = friendsService.getByUserOneAndUserTwoAndFriendsSinceIsNotNull(friend.getUserTwo(), friend.getUserOne());
+        Friend f3 = friendsService.getByUserOneAndUserTwoAndFriendsSinceIsNull(friend.getUserOne(), friend.getUserTwo());
+        Friend f4 = friendsService.getByUserOneAndUserTwoAndFriendsSinceIsNull(friend.getUserTwo(),friend.getUserOne());
+
+        if(f1 == null && f2 == null && f3 == null && f4 == null){
             log.info("\tfrom user id " + user.getId() + " to " + receiverUserId);
             friendsService.addFriend(friend);
             return true;
         }
         else{
-            log.info("\tfrom user id " + user.getId() + " to " + receiverUserId + " already exists");
+            log.info("\tuser_id: " + user.getId() + ", and user_id: " + receiverUserId + " already friends or request has been sent");
             return false;
         }
 
@@ -87,8 +88,7 @@ public class FriendsController {
     public void acceptFriendRequest(@RequestBody User senderUser, HttpServletRequest request){
 
         User receiverUser = (User) request.getSession().getAttribute("user");
-        log.info("t1: " + send)
-        Friend friend = friendsService.getByUserOneAndUserTwo(senderUser, receiverUser);
+        Friend friend = friendsService.getByUserOneAndUserTwoAndFriendsSinceIsNull(senderUser, receiverUser);
         friend.setFriendsSince(new Timestamp(System.currentTimeMillis()));
         friendsService.addFriend(friend);
 
@@ -99,7 +99,7 @@ public class FriendsController {
     public void declineFriendRequest(@RequestBody User senderUser, HttpServletRequest request){
 
         User receiverUser = (User) request.getSession().getAttribute("user");
-        Friend friend = friendsService.getByUserOneAndUserTwo(senderUser, receiverUser);
+        Friend friend = friendsService.getByUserOneAndUserTwoAndFriendsSinceIsNotNull(senderUser, receiverUser);
         friendsService.removeFriend(friend);
         log.info("declineFriendRequest(): sender: " + senderUser.toString() + ", receiver: " + receiverUser.toString());
     }
@@ -108,9 +108,9 @@ public class FriendsController {
     public void deleteFriend(@RequestBody User receiverUser, HttpServletRequest request){
 
         User senderUser = (User) request.getSession().getAttribute("user");
-        Friend friend = friendsService.getByUserOneAndUserTwo(senderUser, receiverUser);
+        Friend friend = friendsService.getByUserOneAndUserTwoAndFriendsSinceIsNotNull(senderUser, receiverUser);
         if(friend == null){
-            friendsService.getByUserOneAndUserTwo(receiverUser, senderUser);
+            friendsService.getByUserOneAndUserTwoAndFriendsSinceIsNotNull(receiverUser, senderUser);
         }
         StringBuilder sb = new StringBuilder();
         sb.append("deleteFriend(): ");
@@ -126,10 +126,13 @@ public class FriendsController {
     public boolean areFriends(@PathVariable Integer userId, HttpServletRequest request){
         User user = (User) request.getSession().getAttribute("user");
         User otherUser = usersService.getUser(userId);
-        Friend friend = friendsService.getByUserOneAndUserTwo(user, otherUser);
+        if(user.getId().equals(otherUser.getId())){ // allows viewing of own profile even without friend object existing
+            return true;
+        }
+        Friend friend = friendsService.getByUserOneAndUserTwoAndFriendsSinceIsNotNull(user, otherUser);
         log.info("areFriends(): user: " + user.toString() + ", otherUser: " + otherUser.toString());
         if(friend == null){
-            friend = friendsService.getByUserOneAndUserTwo(otherUser, user);
+            friend = friendsService.getByUserOneAndUserTwoAndFriendsSinceIsNotNull(otherUser, user);
             if(friend == null){
                 return false;
             }
@@ -137,5 +140,25 @@ public class FriendsController {
         log.info("\t" + friend.toString());
 
         return true;
+    }
+
+    @GetMapping(value = "/requestsent/{userId}")
+    public String requestSent(@PathVariable Integer userId, HttpServletRequest request){
+        User user = (User) request.getSession().getAttribute("user");
+        User otherUser = usersService.getUser(userId);
+
+        Friend friend = friendsService.getByUserOneAndUserTwoAndFriendsSinceIsNull(user, otherUser);
+        log.info("requestSent(): user: " + user.toString() + ", otherUser: " + otherUser.toString());
+        if(friend == null){
+
+            friend = friendsService.getByUserOneAndUserTwoAndFriendsSinceIsNull(otherUser, user);
+            if(friend == null){
+                return "no request sent";
+            }
+            return "They sent request";
+        }
+        log.info("\t" + friend.toString());
+
+        return "You sent request";
     }
 }

@@ -1,6 +1,7 @@
 package model.repositories;
 
 import com.carlmccann2.fakebookboot.DataConfig;
+import com.carlmccann2.fakebookboot.FakebookBootApplication;
 import com.carlmccann2.fakebookboot.model.orm.Friend;
 import com.carlmccann2.fakebookboot.model.orm.User;
 import com.carlmccann2.fakebookboot.model.repositories.FriendsRepository;
@@ -24,7 +25,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-@ContextConfiguration(classes = DataConfig.class)
+@ContextConfiguration(classes = {DataConfig.class, FakebookBootApplication.class})
 @ActiveProfiles("test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FriendsRepositoryTest {
@@ -72,8 +73,11 @@ public class FriendsRepositoryTest {
 
     @Test
     public void test05_getByUserOneAndUserTwoAndFriendsSinceIsNotNull(){
-        fail("to be implemented");
-        friendsRepository.getByUserOneAndUserTwoAndFriendsSinceIsNotNull(new User(), new User());
+        User userOne = usersRepository.getUserById(7);
+        User userTwo = usersRepository.getUserById(16);
+        Friend friend = friendsRepository.getByUserOneAndUserTwoAndFriendsSinceIsNotNull(userOne, userTwo);
+        assertNotNull("friend object is null", friend);
+        assertEquals("friendship_id does not match,", friend.getFriendshipId(), new Integer(8));
     }
 
 }

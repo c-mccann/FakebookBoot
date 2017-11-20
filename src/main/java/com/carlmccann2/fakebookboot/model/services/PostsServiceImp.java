@@ -12,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PostsServiceImp implements PostsService{
 
@@ -79,11 +80,16 @@ public class PostsServiceImp implements PostsService{
 
         List<Post> feedPosts = new ArrayList<>();
 
+        feedPosts.addAll(postsRepository.getAllByUserPostedTo(user));
+
         for(Friend f: friends){
             User friend = (user.equals(f.getUserOne())) ? f.getUserTwo() : f.getUserOne();
             feedPosts.addAll(postsRepository.getAllByUserPostedTo(friend));
         }
+
         feedPosts.addAll(postsRepository.getAllByUser(user));
+
+        feedPosts = feedPosts.stream().distinct().collect(Collectors.toList());
         Collections.sort(feedPosts, Comparator.comparing(Post::getPostCreated).reversed());
         return feedPosts;
     }

@@ -15,7 +15,9 @@ public interface FriendsService {
 
     List<Friend> getAllByUserTwoAndFriendsSinceIsNull(User userTwo);
 
-    Friend getByUserOneAndUserTwo(User userOne, User userTwo);
+    Friend getByUserOneAndUserTwoAndFriendsSinceIsNotNull(User userOne, User userTwo);
+
+    Friend getByUserOneAndUserTwoAndFriendsSinceIsNull(User userOne, User userTwo);
 
     boolean addFriend(Friend friend);
 

@@ -44,15 +44,27 @@ public class FriendsServiceImp implements FriendsService {
     }
 
     @Override
-    public Friend getByUserOneAndUserTwo(User userOne, User userTwo) {
+    public Friend getByUserOneAndUserTwoAndFriendsSinceIsNotNull(User userOne, User userTwo) {
         StringBuilder sb = new StringBuilder();
-        sb.append("getByUserOneAndUserTwo(): ");
-        if(userOne == null) sb.append("userOne: " + null);
-        else                sb.append("userOne: " + userOne.toString());
-        if(userTwo == null) sb.append(", userTwo: " + null);
-        else                sb.append(", userTwo: " + userTwo.toString());
+        sb.append("getByUserOneAndUserTwoAndFriendsSinceIsNotNull(): userOne: ");
+        if(userOne == null) sb.append("null");
+        else                sb.append(userOne.toString());
+        if(userTwo == null) sb.append(", userTwo: null");
+        else                sb.append(", userTwo: ").append(userTwo.toString());
         log.info(sb.toString());
         return friendsRepository.getByUserOneAndUserTwoAndFriendsSinceIsNotNull(userOne, userTwo);
+    }
+
+    @Override
+    public Friend getByUserOneAndUserTwoAndFriendsSinceIsNull(User userOne, User userTwo) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("getByUserOneAndUserTwoAndFriendsSinceIsNull(): ");
+        if(userOne == null) sb.append("userOne: null");
+        else                sb.append("userOne: ").append(userOne.toString());
+        if(userTwo == null) sb.append(", userTwo: null");
+        else                sb.append(", userTwo: ").append(userTwo.toString());
+        log.info(sb.toString());
+        return friendsRepository.getByUserOneAndUserTwoAndFriendsSinceIsNull(userOne, userTwo);
     }
 
     @Override

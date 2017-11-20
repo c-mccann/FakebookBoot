@@ -1,6 +1,7 @@
 package model.repositories;
 
 import com.carlmccann2.fakebookboot.DataConfig;
+import com.carlmccann2.fakebookboot.FakebookBootApplication;
 import com.carlmccann2.fakebookboot.model.orm.Comment;
 import com.carlmccann2.fakebookboot.model.orm.Like;
 import com.carlmccann2.fakebookboot.model.orm.Post;
@@ -28,7 +29,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-@ContextConfiguration(classes = DataConfig.class)
+@ContextConfiguration(classes = {DataConfig.class, FakebookBootApplication.class})
 @ActiveProfiles("test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LikesRepositoryTest {

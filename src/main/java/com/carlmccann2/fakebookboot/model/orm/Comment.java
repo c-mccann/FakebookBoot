@@ -63,7 +63,6 @@ public class Comment implements Serializable {
 
     @OneToMany
     @JoinColumn(name="comment_id", referencedColumnName="comment_id")
-    @JsonIgnore
     public Set<Like> getLikes() {
         return likes;
     }

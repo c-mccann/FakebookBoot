@@ -12,7 +12,6 @@ function loadOtherProfileSidebar(user) {
         $('#left-body-space').append(otherProfileSidebarContainer);
         console.log("other profile sidebar loaded");
     });
-    loadAddFriendBtn(user);
 
     var url = "http://localhost:8080/fakebook/friends/arefriends/" + user.id;
     $.ajax({
@@ -28,9 +27,34 @@ function loadOtherProfileSidebar(user) {
                 loadWall();
                 loadAddPostToWall(user);
                 loadPostsToWall(user);
-                $("#add_friend_btn ").remove();
             }
             else{
+                loadAddFriendBtn(user);
+
+                var url2 = "http://localhost:8080/fakebook/friends/requestsent/" + user.id;
+                $.ajax({
+                    url: url2,
+                    dataType: 'text',
+                    type: 'GET',
+                    error: function () {
+                        console.log("error: " + url2);
+                    },
+                    success: function (data) {
+                        console.log("success: " + url2);
+                        console.log("t1: " + data);
+
+                        if(data === "You sent request"){
+                            $("#add_friend_btn").text("Friend Request Sent");
+                            $("#add_friend_btn").attr('disabled', true);
+                        }
+                        else if(data === "They sent request"){
+                            $("#add_friend_btn").text("Friend Request Received");
+                            $("#add_friend_btn").attr('disabled', true);
+                        }
+                    }
+                });
+
+
                 $("#middle-body-space").empty();
                 $("#middle-body-space").html("<h1>Must be friends<br>to view Wall</h1>");
             }
@@ -46,11 +70,6 @@ function loadHomeButton(user){
         var homeButton = wrapper.firstChild;
 
         $(homeButton).on('click', function () {
-            // loadFakebookHeader();
-            // loadProfileSidebar(JSON.stringify(user));
-            // loadFeed();
-            // loadAddPostToFeed(user);
-            // loadPostsToFeed(user);
             isLoggedIn();
         });
 
@@ -181,15 +200,33 @@ function loadPostsToWall(user) {
                     $(newPostDiv).find('div.post-text-area').text(post.postText);
                     $(newPostDiv).find('span.like-count').text(post.likes.length);
 
-                    $.each(post.comments, function (index, value) {
+                    $.each(post.comments, function (index, value2) {
                         $.get("html/comment.html", function (data) {
                             var wrapper = document.createElement('div');
                             wrapper.innerHTML = data;
                             var commentLi = wrapper.firstChild;
                             var newCommentLi = $(commentLi);
                             // not performing anything that needs jquery on this, so can stay as dom object
-                            $(newCommentLi).find('div.post-comment-name').text(value.user.firstName + ' ' + value.user.lastName);
-                            $(newCommentLi).find('div.post-comment-text').text(value.commentText);
+                            $(newCommentLi).find('div.post-comment-name').text(value2.user.firstName + ' ' + value2.user.lastName);
+                            $(newCommentLi).find('div.post-comment-text').text(value2.commentText);
+                            $(newCommentLi).find('span.like-count').text(value2.likes.length);
+
+                            $(newCommentLi).find('button.comment-like-btn').on('click', function(){
+                                console.log("like comment: " + value.commentId);
+                                var url2 = "http://localhost:8080/fakebook/likes/comment/" + value2.commentId;
+                                $.ajax({
+                                    url: url2,
+                                    type: 'POST',
+                                    error: function () {
+                                        console.log("error: " + url2);
+                                    },
+                                    success: function () {
+                                        console.log("success: " + url2);
+                                    }
+                                });
+                                loadOtherProfileSidebar(user);
+                            });
+
                             if(index === post.comments.length - 1){
                                 $(newCommentLi).find('br.comment-br').remove();
 
@@ -226,6 +263,25 @@ function loadPostsToWall(user) {
 
                         loadOtherProfileSidebar(user);
                     });
+
+                    //TODO: add functionality: like posts
+                    $(newPostDiv).find('button.post-like-btn').on('click', function () {
+                        console.log("like post: " + post.postId);
+                        var url2 = "http://localhost:8080/fakebook/likes/post/" + post.postId;
+                        $.ajax({
+                            url: url2,
+                            type: 'POST',
+                            error: function () {
+                                console.log("error: " + url2);
+                            },
+                            success: function () {
+                                console.log("success: " + url2);
+                            }
+                        });
+
+                        loadOtherProfileSidebar(user);
+                    });
+
                     $('#wall').append(newPostDiv);
                 });
             });

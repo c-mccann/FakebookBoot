@@ -1,6 +1,7 @@
 package model.services;
 
 import com.carlmccann2.fakebookboot.DataConfig;
+import com.carlmccann2.fakebookboot.FakebookBootApplication;
 import com.carlmccann2.fakebookboot.ServiceConfig;
 import com.carlmccann2.fakebookboot.model.orm.User;
 import com.carlmccann2.fakebookboot.model.services.UsersService;
@@ -26,7 +27,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-@ContextConfiguration(classes = {DataConfig.class, ServiceConfig.class})
+@ContextConfiguration(classes = {DataConfig.class, ServiceConfig.class, FakebookBootApplication.class})
 @ActiveProfiles("test")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UsersServiceTest {

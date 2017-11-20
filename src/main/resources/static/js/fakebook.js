@@ -203,7 +203,12 @@ function loadAddPostToFeed(user){
             });
         });
 
-        $("#feed").append(addPostDiv);
+        if($("#feed").find("div.add-post-div").length === 0){ // ensures only one gets loaded
+            $("#feed").append(addPostDiv);
+        }
+        else{
+
+        }
     });
     console.log("added add post to feed");
 }
@@ -241,6 +246,7 @@ function loadPostsToFeed(user) {
                     var postDiv = wrapper.firstChild; // dom object
                     var newPostDiv = $(postDiv); // jquery object
                     var d = new Date(post.postCreated);
+                    // TODO: left pad single digit numbers
                     var formatted = d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds()+ ' ' +  d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
 
                     $(newPostDiv).find('label.poster-label').text(post.user.firstName + ' ' + post.user.lastName);
@@ -264,9 +270,27 @@ function loadPostsToFeed(user) {
                             wrapper.innerHTML = data;
                             var commentLi = wrapper.firstChild;
                             var newCommentLi = $(commentLi);
-                            // not performing anything that needs jquery on this, so can stay as dom object
+
                             $(newCommentLi).find('div.post-comment-name').text(value2.user.firstName + ' ' + value2.user.lastName);
                             $(newCommentLi).find('div.post-comment-text').text(value2.commentText);
+
+                            $(newCommentLi).find('span.like-count').text(value2.likes.length);
+
+                            $(newCommentLi).find('button.comment-like-btn').on('click', function() {
+                                console.log("like comment: " + value2.commentId);
+                                var url2 = "http://localhost:8080/fakebook/likes/comment/" + value2.commentId;
+                                $.ajax({
+                                    url: url2,
+                                    type: 'POST',
+                                    error: function () {
+                                        console.log("error: " + url2);
+                                    },
+                                    success: function () {
+                                        console.log("success: " + url2);
+                                    }
+                                });
+                                isLoggedIn();
+                            });
                             if(index === post.comments.length - 1){
                                 $(newCommentLi).find('br.comment-br').remove();
 
@@ -296,6 +320,25 @@ function loadPostsToFeed(user) {
 
                             success: function(data) {
                                 console.log("success: " + url)
+                            }
+                        });
+
+                        isLoggedIn();
+                    });
+
+
+                    // TODO: add functionality: like post
+                    $(newPostDiv).find('button.post-like-btn').on('click', function () {
+                        console.log("like post: " + post.postId);
+                        var url2 = "http://localhost:8080/fakebook/likes/post/" + post.postId;
+                        $.ajax({
+                            url: url2,
+                            type: 'POST',
+                            error: function () {
+                              console.log("error: " + url2);
+                            },
+                            success: function () {
+                                console.log("success: " + url2);
                             }
                         });
 

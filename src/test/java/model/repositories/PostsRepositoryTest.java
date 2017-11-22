@@ -39,7 +39,7 @@ public class PostsRepositoryTest {
     @Test
     @Transactional
     public void test01_getAllByUser(){
-        User user = usersRepository.getUserByEmail("abethebabe@gmail.com");
+        User user = usersRepository.findOne(1);
         List<Post> posts = postsRepository.getAllByUser(user);
         assertTrue("test01_getAllByUser: nothing returned",posts.size() > 0);
         StringBuilder stringBuilder = new StringBuilder();
@@ -50,10 +50,15 @@ public class PostsRepositoryTest {
 
     @Test
     @Transactional
-    public void test02_findOne(){
-        Post post = postsRepository.findOne(1);
-        assertNotNull("test02_getPostByPostId: is null", post);
-        log.info("test02_getPostByPostId: " + post.toString());
+    public void test02_getAllByUserPostedTo(){
+        User user = usersRepository.findOne(1);
+        List<Post> posts = postsRepository.getAllByUserPostedTo(user);
+        assertTrue("test02_getAllByUserPostedTo: nothing returned",posts.size() > 0);
+        StringBuilder stringBuilder = new StringBuilder();
+        posts.forEach(p -> stringBuilder.append(p.toString() + ", "));
+        log.info("test02_getAllByUserPostedTo: " + stringBuilder.toString());
     }
+
+
 
 }

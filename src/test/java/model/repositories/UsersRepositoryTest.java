@@ -16,6 +16,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 
@@ -32,35 +34,47 @@ public class UsersRepositoryTest {
 
     @Test
     public void test01_getUserByEmail(){
-        String email = "johndoe@gmail.com";
+        String email = "carlmccann2@gmail.com";
         User user = usersRepository.getUserByEmail(email);
         assertNotNull("test01_getUserByEmail: " + user.toString(), user);
         log.info("test01_getUserByEmail: " + user.toString());
 
-        Integer i = new Integer(5);
-        assertEquals(i, user.getId());
-        assertEquals("abraham", user.getFirstName());
-        assertEquals("lincoln", user.getLastName());
-        assertEquals(email, user.getEmail());
-        assertEquals("1337LeEt!",user.getPassword());
-        assertEquals(1508185538000L, user.getAccountCreated().getTime());
+        Integer id = new Integer(1);
+        assertEquals(id, user.getId());
+        assertEquals("Carl", user.getFirstName());
+        assertEquals("McCann", user.getLastName());
+        assertEquals("carlmccann2@gmail.com", user.getEmail());
+        assertEquals("to be encrypted",user.getPassword());
 
 
     }
 
     @Test
     public void test02_getUserById(){
-        Integer id = 5;
+        Integer id = new Integer(1);
         User user = usersRepository.getUserById(id);
         assertNotNull("test02_getUserById: " + user.toString(), user);
         log.info("test02_getUserById: " + user.toString());
 
         assertEquals(id, user.getId());
-        assertEquals("abraham", user.getFirstName());
-        assertEquals("lincoln", user.getLastName());
-        assertEquals("abethebabe@gmail.com", user.getEmail());
-        assertEquals("1337LeEt!",user.getPassword());
-        assertEquals(1508185538000L, user.getAccountCreated().getTime());
+        assertEquals("Carl", user.getFirstName());
+        assertEquals("McCann", user.getLastName());
+        assertEquals("carlmccann2@gmail.com", user.getEmail());
+        assertEquals("to be encrypted",user.getPassword());
+
+    }
+
+
+
+//    @Query(value = "SELECT * FROM users WHERE CONCAT(first_name, ' ', last_name) RLIKE ?1", nativeQuery = true)
+//    List<User> getUsersByNameNearestMatch(String fullName);
+//
+    @Test
+    public void test03_getUsersByNameNearestMatch(){
+        String name = "fake";
+        List<User> users = usersRepository.getUsersByNameNearestMatch(name);
+        assertNotNull("nothing returned", users);
+        assertTrue("wrong number of objects returned", users.size() == 2);
 
 
     }

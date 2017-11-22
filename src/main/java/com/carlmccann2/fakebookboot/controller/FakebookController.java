@@ -25,8 +25,6 @@ public class FakebookController {
 
     private Log log = LogFactory.getLog(FakebookController.class);
 
-    @Autowired
-    private JavaMailSender javaMailSender;
 
     @RequestMapping(value = "/")
     public ModelAndView fakebook() {
@@ -55,28 +53,4 @@ public class FakebookController {
         return request.getSession().getAttribute("user") == null;
     }
 
-    @RequestMapping(value = "/login")
-    public ModelAndView login() {
-        log.info("login()");
-        return new ModelAndView("login");
-    }
-
-
-    @RequestMapping(value = "/register")
-    public String register() {
-        log.info("register()");
-        return "register";
-    }
-
-    @RequestMapping(value = "/activity-feed")
-    public String feed() {
-        log.info("feed()");
-        return "activity-feed";
-    }
-
-    @RequestMapping(value = "/profile")
-    public String profile() {
-        log.info("profile()");
-        return "profile";
-    }
 }

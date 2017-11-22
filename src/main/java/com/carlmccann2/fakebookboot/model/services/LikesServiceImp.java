@@ -12,6 +12,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 public class LikesServiceImp implements LikesService {
 
     private Log log = LogFactory.getLog(LikesServiceImp.class);
@@ -53,5 +55,11 @@ public class LikesServiceImp implements LikesService {
             likesRepository.save(like);
         }
 
+    }
+
+    @Override
+    public List<Like> getAll() {
+        log.info("getAll()");
+        return likesRepository.findAll();
     }
 }

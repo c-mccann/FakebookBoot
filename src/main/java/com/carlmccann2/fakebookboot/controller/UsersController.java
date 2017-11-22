@@ -25,21 +25,19 @@ public class UsersController {
     @Autowired
     private UsersService usersService;
 
-    @CrossOrigin(origins = "http://localhost:8080")
+
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<User> getAll() {
         log.info("getAllUsers()");
         return usersService.getUsers();
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void addUser(@RequestBody final User user){
         log.info("addUser(): " + user.toString());
         usersService.addUser(user);
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(value = "/{email:.+}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
     public User getUserByEmail(@PathVariable String email) {
@@ -57,14 +55,12 @@ public class UsersController {
         return user;
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @DeleteMapping(value = "/remove/{userId}")
     public void removeUser(@PathVariable Integer userId){
         log.info("removeUser(): " + userId);
         usersService.removeUser(userId);
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(value = "/search/{fullName}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<User> getUsersByNameNearestMatch(@PathVariable String fullName){
         log.info("getUsersByNameNearestMatch(): " + fullName);
@@ -72,7 +68,6 @@ public class UsersController {
     }
 
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(value = "/loggedin", produces = MediaType.APPLICATION_JSON_VALUE)
     public User loggedIn(HttpServletRequest request){
         User user = (User) request.getSession().getAttribute("user");

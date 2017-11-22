@@ -38,35 +38,35 @@ public class UsersServiceTest {
     private UsersService usersService;
 
     @Test
-    public void test01_getUserById(){
+    public void test01_getUser(){
 
-        Integer id = new Integer(5);
-        User user = usersService.getUser(id);
-        assertNotNull("test01_getUserById: " + id, user);
-        log.info("test01_getUserById: " + user.toString());
+        String email = "carlmccann2@gmail.com";
+        User user = usersService.getUser(email);
+        assertNotNull("test01_getUserByEmail: " + user.toString(), user);
+        log.info("test01_getUserByEmail: " + user.toString());
+
+        Integer id = new Integer(1);
         assertEquals(id, user.getId());
-        assertEquals("abraham", user.getFirstName());
-        assertEquals("lincoln", user.getLastName());
-        assertEquals("abethebabe@gmail.com", user.getEmail());
-        assertEquals("1337LeEt!",user.getPassword());
-        assertEquals(1508185538000L, user.getAccountCreated().getTime());
+        assertEquals("Carl", user.getFirstName());
+        assertEquals("McCann", user.getLastName());
+        assertEquals("carlmccann2@gmail.com", user.getEmail());
+        assertEquals("to be encrypted",user.getPassword());
     }
 
     @Test
-    public void test02_getUserByEmail(){
+    public void test02_getUser(){
 
-        String email = "abethebabe@gmail.com";
-        User user = usersService.getUser(email);
-        Integer i = new Integer(5);
-        assertEquals(i, user.getId());
-        assertEquals("abraham", user.getFirstName());
-        assertEquals("lincoln", user.getLastName());
-        assertEquals(email, user.getEmail());
-        assertEquals("1337LeEt!",user.getPassword());
-        assertEquals(1508185538000L, user.getAccountCreated().getTime());
+        Integer id = new Integer(1);
+        User user = usersService.getUser(id);
+        assertNotNull("test02_getUserById: " + user.toString(), user);
+        log.info("test02_getUserById: " + user.toString());
 
+        assertEquals(id, user.getId());
+        assertEquals("Carl", user.getFirstName());
+        assertEquals("McCann", user.getLastName());
+        assertEquals("carlmccann2@gmail.com", user.getEmail());
+        assertEquals("to be encrypted",user.getPassword());
     }
-
 
     @Test
     public void test03_getUsers(){
@@ -87,14 +87,43 @@ public class UsersServiceTest {
 
         User user1 = usersService.getUser(user.getEmail());
 
-        assertNotNull("test05_addUser: return null", user1);
-        log.info("test05_addUser: " + user1.toString());
+        assertNotNull("test04_addUser: return null", user1);
+        log.info("test04_addUser: " + user1.toString());
 
     }
 
     @Test
     @Transactional
-    public void test05_removeUser(){
+    public void test05_registerUser(){
+
+        User user = new User("Test", "User", "testuser@gmail.com", "Testuser1!", null);
+        usersService.registerUser(user);
+
+        User user1 = usersService.getUser(user.getEmail());
+
+        assertNotNull("test05_registerUser: return null", user1);
+        log.info("test05_registerUser: " + user1.toString());
 
     }
+
+    @Test
+    @Transactional
+    public void test06_removeUser(){
+        User user = usersService.getUser(21);
+        usersService.removeUser(user.getId());
+        assertNull(usersService.getUser(21));
+    }
+
+    @Test
+    public void test07_getUsersByNameNearestMatch(){
+        String name = "fake";
+        List<User> users = usersService.getUsersByNameNearestMatch(name);
+        assertNotNull("nothing returned", users);
+        assertTrue("wrong number of objects returned", users.size() == 2);
+    }
+
+
+
+
+
 }

@@ -61,14 +61,20 @@ public class FriendsRepositoryTest {
 
     @Test
     public void test03_getAllByUserOneAndFriendsSinceIsNull(){
-        fail("to be implemented");
-        friendsRepository.getAllByUserOneAndFriendsSinceIsNull(new User());
+        User userOne = usersRepository.getUserById(8);
+        List<Friend> friends = friendsRepository.getAllByUserOneAndFriendsSinceIsNull(userOne);
+        assertNotNull(friends);
+        assertEquals("wrong number of objects returned" + friends.size(),1,friends.size());
+        assertEquals("friendship_id doesn't match", new Integer(12), friends.get(0).getFriendshipId());
     }
 
     @Test
     public void test04_getAllByUserTwoAndFriendsSinceIsNull(){
-        fail("to be implemented");
-        friendsRepository.getAllByUserTwoAndFriendsSinceIsNull(new User());
+        User userTwo = usersRepository.getUserById(21);
+        List<Friend> friends = friendsRepository.getAllByUserTwoAndFriendsSinceIsNull(userTwo);
+        assertNotNull(friends);
+        assertEquals("expected size: " + 1 + ", actual: " + friends.size(),1,friends.size());
+        assertEquals("friendship_id doesn't match", new Integer(12), friends.get(0).getFriendshipId());
     }
 
     @Test
@@ -77,7 +83,18 @@ public class FriendsRepositoryTest {
         User userTwo = usersRepository.getUserById(16);
         Friend friend = friendsRepository.getByUserOneAndUserTwoAndFriendsSinceIsNotNull(userOne, userTwo);
         assertNotNull("friend object is null", friend);
-        assertEquals("friendship_id does not match,", friend.getFriendshipId(), new Integer(8));
+        assertEquals("friendship_id does not match,", new Integer(8), friend.getFriendshipId());
     }
+
+    @Test
+    public void test06_getByUserOneAndUserTwoAndFriendsSinceIsNull(){
+        User userOne = usersRepository.getUserById(8);
+        User userTwo = usersRepository.getUserById(21);
+        Friend friend = friendsRepository.getByUserOneAndUserTwoAndFriendsSinceIsNull(userOne, userTwo);
+        assertNotNull(friend);
+        assertEquals("friendship_id does not match,", new Integer(12), friend.getFriendshipId());
+
+    }
+
 
 }

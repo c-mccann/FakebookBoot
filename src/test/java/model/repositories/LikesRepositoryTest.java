@@ -9,6 +9,7 @@ import com.carlmccann2.fakebookboot.model.orm.User;
 import com.carlmccann2.fakebookboot.model.repositories.CommentsRepository;
 import com.carlmccann2.fakebookboot.model.repositories.LikesRepository;
 import com.carlmccann2.fakebookboot.model.repositories.PostsRepository;
+import com.carlmccann2.fakebookboot.model.repositories.UsersRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.FixMethodOrder;
@@ -35,14 +36,15 @@ import static org.junit.Assert.*;
 public class LikesRepositoryTest {
 
     private Log log = LogFactory.getLog(LikesRepository.class);
+
     @Autowired
     private LikesRepository likesRepository;
-
     @Autowired
     private PostsRepository postsRepository;
-
     @Autowired
     private CommentsRepository commentsRepository;
+    @Autowired
+    private UsersRepository usersRepository;
 
     @Test
     @Transactional
@@ -69,5 +71,25 @@ public class LikesRepositoryTest {
         log.info("test02_getAllByComment: " + stringBuilder.toString().substring(0, stringBuilder.length() - 2));
 
     }
+
+    @Test
+    public void test03_getByUserAndPost(){
+        User user = usersRepository.getUserById(3);
+        Post post = postsRepository.findOne(1);
+        Like like = likesRepository.getByUserAndPost(user, post);
+        assertNotNull(like);
+        assertEquals("like_id doesnt match", new Integer(1),like.getLikeId());
+    }
+
+    @Test
+    public void test04_getByUserAndComment(){
+        User user = usersRepository.getUserById(2);
+        Comment comment = commentsRepository.findOne(1);
+        Like like = likesRepository.getByUserAndComment(user, comment);
+        assertNotNull(like);
+        assertEquals("like_id doesnt match", new Integer(2),like.getLikeId());
+
+    }
+
 
 }

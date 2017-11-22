@@ -21,53 +21,55 @@ $(document).ready(function(){
                     console.log("success: " + url);
                     console.log("\t" + jsonString);
 
-                    // remove dropdown list on new list returned
-                    if($("#search_bar_dropdown_list").length){
-                        $("#search_bar_dropdown_list").remove();
-                    }
-                    // add dropdown (again)
-                    $.get("html/search-bar-dropdown-list.html", function (data) {
-                        $("#search_div").append(data);
-                        return false;
-                    });
-                    console.log("added search bar dropdown");
-
-                    // TODO: finish
-
-                    userArray.map( function(item) {
-                        var userString = JSON.stringify(item);
-                        var user = JSON.parse(userString);
-
-                        // append search result html to list
-
-                        $.get("html/search-result.html", function (data) {
-
-                            var wrapper= document.createElement('div');
-                            wrapper.innerHTML = data;
-                            var searchResultHtml = wrapper.firstChild;
-
-                            // replace photo
-                            // searchResultHtml.innerHTML = searchResultHtml.innerHTML.replace('src="png/profile-photo.png"', "something");
-                            // replace text
-                            searchResultHtml.innerHTML = searchResultHtml.innerHTML.replace("fname lname", user.firstName + ' ' + user.lastName);
-                            $(searchResultHtml).on('click', function () {
-
-                                console.log("go to profile of: " + user.id);
-                                loadOtherProfileSidebar(user);
-
-                                loadHomeButton(user);
-                                hidePreviousSearch();
-                            });
-
-                         // TODO: add user ids to tags for easier look up upon click
-                         //    https://www.w3schools.com/tags/att_data-.asp
-
-                            $("#search_bar_dropdown_list").append(searchResultHtml);
-                            console.log("\tappended search result to dropdown. " + user.firstName + " " + user.lastName);
+                    $("#search_div").find("ul#search_bar_dropdown_list").remove(); // sometimes 2nd list appears. this removes it
+                    if (typeof userArray !== 'undefined' && userArray.length > 0) {
+                        // add dropdown (again)
+                        $.get("html/search-bar-dropdown-list.html", function (data) {
+                            $("#search_div").append(data);
                             return false;
                         });
-                        return false;
-                    });
+                        console.log("added search bar dropdown");
+
+                        // TODO: finish
+
+                        userArray.map( function(item) {
+                            var userString = JSON.stringify(item);
+                            var user = JSON.parse(userString);
+
+                            // append search result html to list
+
+                            $.get("html/search-result.html", function (data) {
+
+                                var wrapper= document.createElement('div');
+                                wrapper.innerHTML = data;
+                                var searchResultHtml = wrapper.firstChild;
+
+                                // replace photo
+                                // searchResultHtml.innerHTML = searchResultHtml.innerHTML.replace('src="png/profile-photo.png"', "something");
+                                // replace text
+                                searchResultHtml.innerHTML = searchResultHtml.innerHTML.replace("fname lname", user.firstName + ' ' + user.lastName);
+                                $(searchResultHtml).on('click', function () {
+
+                                    console.log("go to profile of: " + user.id);
+                                    loadOtherProfileSidebar(user);
+
+                                    loadHomeButton(user);
+                                    hidePreviousSearch();
+                                });
+
+                                // TODO: add user ids to tags for easier look up upon click
+                                //    https://www.w3schools.com/tags/att_data-.asp
+
+                                $("#search_bar_dropdown_list").append(searchResultHtml);
+                                console.log("\tappended search result to dropdown. " + user.firstName + " " + user.lastName);
+                                return false;
+                            });
+                            return false;
+                        });
+                    }
+
+
+
                 }
             });
         }
@@ -295,7 +297,7 @@ function loadPostsToFeed(user) {
                                 $(newCommentLi).find('br.comment-br').remove();
 
                             }
-                            $(newPostDiv).find('ul.comments-section').append(commentLi);
+                            $(newPostDiv).find('div.comments-section').append(commentLi);
                         });
                     });
 

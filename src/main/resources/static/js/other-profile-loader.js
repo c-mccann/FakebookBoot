@@ -41,7 +41,6 @@ function loadOtherProfileSidebar(user) {
                     },
                     success: function (data) {
                         console.log("success: " + url2);
-                        console.log("t1: " + data);
 
                         if(data === "You sent request"){
                             $("#add_friend_btn").text("Friend Request Sent");
@@ -231,7 +230,7 @@ function loadPostsToWall(user) {
                                 $(newCommentLi).find('br.comment-br').remove();
 
                             }
-                            $(newPostDiv).find('ul.comments-section').append(commentLi);
+                            $(newPostDiv).find('div.comments-section').append(commentLi);
                         });
                     });
 
